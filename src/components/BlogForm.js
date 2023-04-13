@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import axios from 'axios';
 
-const BlogForm = () => {
+function BlogForm() {
 	const [title, setTitle] = useState('');
 	const [body, setBody] = useState('');
 
@@ -28,6 +28,6 @@ const BlogForm = () => {
 			</button>
 		</div>
 	);
-};
+}
 
 export default BlogForm;

@@ -1,6 +1,9 @@
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
-import BlogForm from './components/BlogForm';
 import NavBar from './components/NavBar';
+import HomePage from './pages/HomePage';
+import ListPage from './pages/ListPage';
+import CreatePage from './pages/CreatePage';
+import EditPage from './pages/EditPage';
 
 function App() {
 	return (
@@ -8,8 +11,10 @@ function App() {
 			<NavBar />
 			<div className="container">
 				<Routes>
-					<Route path="/" element="Home Page" />
-					<Route path="/blogs" element={<BlogForm />}></Route>
+					<Route path="/" element={<HomePage />} />
+					<Route path="/blogs" element={<ListPage />} />
+					<Route path="/blogs/create" element={<CreatePage />} />
+					<Route path="/blogs/edit" element={<EditPage />} />
 				</Routes>
 			</div>
 		</BrowserRouter>
