@@ -1,6 +1,7 @@
 import axios from 'axios';
 import {useEffect, useState} from 'react';
 import Card from '../components/Card';
+import {Link} from 'react-router-dom';
 
 function ListPage() {
 	const [posts, setPosts] = useState([]);
@@ -17,7 +18,14 @@ function ListPage() {
 
 	return (
 		<div>
-			<h1>Blogs</h1>
+			<div className="d-flex justify-content-between">
+				<h1>Blogs</h1>
+				<div>
+					<Link to="/blogs/create" className="btn btn-success">
+						Create New
+					</Link>
+				</div>
+			</div>
 			{posts.map((post) => {
 				return <Card key={post.id} title={post.title} />;
 			})}
