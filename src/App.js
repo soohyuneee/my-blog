@@ -6,7 +6,7 @@ function App() {
 	return (
 		<BrowserRouter>
 			<NavBar />
-			<div className="container">
+			<div className="container mt-3">
 				<Routes>
 					{routes.map((route) => {
 						return <Route key={route.path} path={route.path} element={route.component} />;
