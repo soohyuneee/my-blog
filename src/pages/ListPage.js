@@ -13,6 +13,14 @@ function ListPage() {
 		});
 	};
 
+	const deleteBlog = (e, id) => {
+		e.stopPropagation();
+
+		axios.delete(`http://localhost:3001/posts/${id}`).then((res) => {
+			setPosts((prevPosts) => prevPosts.filter((post) => post.id !== id));
+		});
+	};
+
 	useEffect(() => {
 		getPosts();
 	}, []);
@@ -28,7 +36,15 @@ function ListPage() {
 				</div>
 			</div>
 			{posts.map((post) => {
-				return <Card key={post.id} title={post.title} onClick={() => navigate('/blogs/edit')} />;
+				return (
+					<Card key={post.id} title={post.title} onClick={() => navigate('/blogs/edit')}>
+						<div>
+							<button className="btn btn-danger btn-sm" onClick={(e) => deleteBlog(e, post.id)}>
+								Delete
+							</button>
+						</div>
+					</Card>
+				);
 			})}
 		</div>
 	);
