@@ -1,4 +1,4 @@
-const LoadingSpinner = () => {
+function LoadingSpinner() {
 	return (
 		<div className="d-flex justify-content-center">
 			<div className="spinner-border" role="status">
@@ -6,6 +6,6 @@ const LoadingSpinner = () => {
 			</div>
 		</div>
 	);
-};
+}
 
 export default LoadingSpinner;
