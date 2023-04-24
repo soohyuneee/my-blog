@@ -11,6 +11,8 @@ function BlogForm({editing}) {
 	const [orginTitle, setOriginTitle] = useState('');
 	const [body, setBody] = useState('');
 	const [originBody, setOriginBody] = useState('');
+	const [publish, setPublish] = useState(false);
+	const [originPublish, setOriginPublish] = useState(false);
 
 	useEffect(() => {
 		if (editing) {
@@ -19,12 +21,14 @@ function BlogForm({editing}) {
 				setOriginTitle(res.data.title);
 				setBody(res.data.body);
 				setOriginBody(res.data.body);
+				setPublish(res.data.publish);
+				setOriginPublish(res.data.publish);
 			});
 		}
 	}, [id, editing]);
 
 	const isEdited = () => {
-		return title !== orginTitle || body !== originBody;
+		return title !== orginTitle || body !== originBody || publish !== originPublish;
 	};
 
 	const goBack = () => {
@@ -37,7 +41,7 @@ function BlogForm({editing}) {
 
 	const onSubmit = () => {
 		if (editing) {
-			axios.patch(`http://localhost:3001/posts/${id}`, {title, body}).then(() => {
+			axios.patch(`http://localhost:3001/posts/${id}`, {title, body, publish}).then(() => {
 				navigate(`/blogs/${id}`);
 			});
 		} else {
@@ -45,12 +49,17 @@ function BlogForm({editing}) {
 				.post('http://localhost:3001/posts', {
 					title,
 					body,
+					publish,
 					createdAt: Date.now(),
 				})
 				.then(() => {
 					navigate('/blogs');
 				});
 		}
+	};
+
+	const onChangePublish = (e) => {
+		setPublish(e.target.checked);
 	};
 
 	return (
@@ -63,6 +72,10 @@ function BlogForm({editing}) {
 			<div className="mb-3">
 				<label className="form-label">Body</label>
 				<textarea className="form-control" value={body} onChange={(e) => setBody(e.target.value)} rows="10" />
+			</div>
+			<div className="form-check mb-3">
+				<input className="form-check-input" type="checkbox" checked={publish} onChange={onChangePublish} />
+				<label className="form-check-label">Publish</label>
 			</div>
 			<button className="btn btn-primary" onClick={onSubmit} disabled={editing && !isEdited()}>
 				{editing ? 'Edit' : 'Post'}
