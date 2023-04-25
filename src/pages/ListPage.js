@@ -37,17 +37,19 @@ function ListPage() {
 			return <div>No blog posts found</div>;
 		}
 
-		return posts.map((post) => {
-			return (
-				<Card key={post.id} title={post.title} onClick={() => navigate(`/blogs/${post.id}`)}>
-					<div>
-						<button className="btn btn-danger btn-sm" onClick={(e) => deleteBlog(e, post.id)}>
-							Delete
-						</button>
-					</div>
-				</Card>
-			);
-		});
+		return posts
+			.filter((post) => post.publish)
+			.map((post) => {
+				return (
+					<Card key={post.id} title={post.title} onClick={() => navigate(`/blogs/${post.id}`)}>
+						<div>
+							<button className="btn btn-danger btn-sm" onClick={(e) => deleteBlog(e, post.id)}>
+								Delete
+							</button>
+						</div>
+					</Card>
+				);
+			});
 	};
 
 	return (
