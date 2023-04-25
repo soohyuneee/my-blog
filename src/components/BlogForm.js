@@ -53,7 +53,7 @@ function BlogForm({editing}) {
 					createdAt: Date.now(),
 				})
 				.then(() => {
-					navigate('/blogs');
+					navigate('/admin');
 				});
 		}
 	};
