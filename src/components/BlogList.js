@@ -16,6 +16,7 @@ function BlogList({isAdmin}) {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [numberOfPosts, setNumberOfPosts] = useState(0);
 	const [numberOfPages, setNumberOfPages] = useState(0);
+	const [searchText, setSearchText] = useState('');
 	const limit = 5;
 
 	useEffect(() => {
@@ -24,6 +25,7 @@ function BlogList({isAdmin}) {
 
 	const onClickPageButton = (page) => {
 		navigate(`${location.pathname}?page=${page}`);
+		setCurrentPage(page);
 		getPosts(page);
 	};
 
@@ -34,6 +36,7 @@ function BlogList({isAdmin}) {
 				_limit: limit,
 				_sort: 'id',
 				_order: 'desc',
+				title_like: searchText,
 			};
 
 			if (!isAdmin) {
@@ -46,13 +49,13 @@ function BlogList({isAdmin}) {
 				setLoading(false);
 			});
 		},
-		[isAdmin]
+		[isAdmin, searchText]
 	);
 
 	useEffect(() => {
 		setCurrentPage(parseInt(pageParam) || 1);
 		getPosts(parseInt(pageParam) || 1);
-	}, [pageParam, getPosts]);
+	}, []);
 
 	const deleteBlog = (e, id) => {
 		e.stopPropagation();
@@ -64,10 +67,6 @@ function BlogList({isAdmin}) {
 
 	if (loading) {
 		return <LoadingSpinner />;
-	}
-
-	if (posts.length === 0) {
-		return <div>No blog posts found</div>;
 	}
 
 	const rederBlogList = () => {
@@ -86,10 +85,33 @@ function BlogList({isAdmin}) {
 		});
 	};
 
+	const onSearch = (e) => {
+		if (e.key === 'Enter') {
+			navigate(`${location.pathname}?page=1`);
+			setCurrentPage(1);
+			getPosts(1);
+		}
+	};
+
 	return (
 		<div>
-			{rederBlogList()}
-			{numberOfPages > 1 && <Pagination currentPage={currentPage} numberOfPages={numberOfPages} onClick={onClickPageButton} />}
+			<input
+				type="text"
+				className="form-control"
+				placeholder="Search.."
+				value={searchText}
+				onChange={(e) => setSearchText(e.target.value)}
+				onKeyUp={onSearch}
+			/>
+			<hr />
+			{posts.length === 0 ? (
+				<div>No blog posts found</div>
+			) : (
+				<>
+					{rederBlogList()}
+					{numberOfPages > 1 && <Pagination currentPage={currentPage} numberOfPages={numberOfPages} onClick={onClickPageButton} />}
+				</>
+			)}
 		</div>
 	);
 }
