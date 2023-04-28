@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import axios from 'axios';
 import {useNavigate, useParams} from 'react-router-dom';
-import {bool} from 'prop-types';
+import propTypes from 'prop-types';
 
 function BlogForm({editing}) {
 	const navigate = useNavigate();
@@ -88,7 +88,7 @@ function BlogForm({editing}) {
 }
 
 BlogForm.propTypes = {
-	editing: bool,
+	editing: propTypes.bool,
 };
 
 BlogForm.defaultProps = {

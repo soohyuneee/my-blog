@@ -3,7 +3,7 @@ import {useCallback, useEffect, useState} from 'react';
 import Card from '../components/Card';
 import {useLocation, useNavigate} from 'react-router-dom';
 import LoadingSpinner from '../components/LoadingSpinner';
-import {bool} from 'prop-types';
+import propTypes from 'prop-types';
 import Pagination from './Pagination';
 
 function BlogList({isAdmin}) {
@@ -95,7 +95,7 @@ function BlogList({isAdmin}) {
 }
 
 BlogList.propTypes = {
-	isAdmin: bool,
+	isAdmin: propTypes.bool,
 };
 
 BlogList.defaultProps = {
