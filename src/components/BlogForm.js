@@ -2,8 +2,10 @@ import {useEffect, useState} from 'react';
 import axios from 'axios';
 import {useNavigate, useParams} from 'react-router-dom';
 import propTypes from 'prop-types';
+import useToast from '../hooks/useToast';
 
 function BlogForm({editing}) {
+	const {addToast} = useToast();
 	const navigate = useNavigate();
 	const {id} = useParams();
 
@@ -74,6 +76,10 @@ function BlogForm({editing}) {
 						createdAt: Date.now(),
 					})
 					.then(() => {
+						addToast({
+							text: 'Successfully created!',
+							type: 'success',
+						});
 						navigate('/admin');
 					});
 			}
