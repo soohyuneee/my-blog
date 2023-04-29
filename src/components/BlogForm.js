@@ -3,6 +3,7 @@ import axios from 'axios';
 import {useNavigate, useParams} from 'react-router-dom';
 import propTypes from 'prop-types';
 import useToast from '../hooks/useToast';
+import LoadingSpinner from './LoadingSpinner';
 
 function BlogForm({editing}) {
 	const {addToast} = useToast();
@@ -17,17 +18,32 @@ function BlogForm({editing}) {
 	const [originPublish, setOriginPublish] = useState(false);
 	const [titleError, setTitleError] = useState(false);
 	const [bodyError, setBodyError] = useState(false);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState('');
 
 	useEffect(() => {
 		if (editing) {
-			axios.get(`http://localhost:3001/posts/${id}`).then((res) => {
-				setTitle(res.data.title);
-				setOriginTitle(res.data.title);
-				setBody(res.data.body);
-				setOriginBody(res.data.body);
-				setPublish(res.data.publish);
-				setOriginPublish(res.data.publish);
-			});
+			axios
+				.get(`http://localhost:3001/posts/${id}`)
+				.then((res) => {
+					setTitle(res.data.title);
+					setOriginTitle(res.data.title);
+					setBody(res.data.body);
+					setOriginBody(res.data.body);
+					setPublish(res.data.publish);
+					setOriginPublish(res.data.publish);
+					setLoading(false);
+				})
+				.catch((e) => {
+					setError('Something went wrong in database');
+					addToast({
+						text: 'Something went wrong',
+						type: 'danger',
+					});
+					setLoading(false);
+				});
+		} else {
+			setLoading(false);
 		}
 	}, [id, editing]);
 
@@ -64,9 +80,17 @@ function BlogForm({editing}) {
 		setBodyError(false);
 		if (validateForm()) {
 			if (editing) {
-				axios.patch(`http://localhost:3001/posts/${id}`, {title, body, publish}).then(() => {
-					navigate(`/blogs/${id}`);
-				});
+				axios
+					.patch(`http://localhost:3001/posts/${id}`, {title, body, publish})
+					.then(() => {
+						navigate(`/blogs/${id}`);
+					})
+					.catch((e) => {
+						addToast({
+							text: 'The blog could not be updated.',
+							type: 'danger',
+						});
+					});
 			} else {
 				axios
 					.post('http://localhost:3001/posts', {
@@ -81,6 +105,12 @@ function BlogForm({editing}) {
 							type: 'success',
 						});
 						navigate('/admin');
+					})
+					.catch((e) => {
+						addToast({
+							text: 'The blog could not be created.',
+							type: 'danger',
+						});
 					});
 			}
 		}
@@ -89,6 +119,14 @@ function BlogForm({editing}) {
 	const onChangePublish = (e) => {
 		setPublish(e.target.checked);
 	};
+
+	if (loading) {
+		return <LoadingSpinner />;
+	}
+
+	if (error) {
+		return <div>{error}</div>;
+	}
 
 	return (
 		<div>
